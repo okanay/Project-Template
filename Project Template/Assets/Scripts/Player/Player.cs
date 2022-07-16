@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 public class Player : CostumBehaviour
     { 
@@ -15,11 +14,7 @@ public class Player : CostumBehaviour
             #endregion
         }
 
-        private void Start()
-        {
-            Debug.Log("GitHub Test.");
-        }
-
+        
         #region Events
 
         private void OnGameStart()
