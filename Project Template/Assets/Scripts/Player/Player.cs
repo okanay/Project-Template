@@ -1,6 +1,8 @@
 using UnityEngine;
 public class Player : CostumBehaviour
-    { 
+{
+    public delegate void MovementDelegate();
+    public MovementDelegate GameStart;
         private void Awake()
         {
             #region Event Connect
@@ -13,13 +15,13 @@ public class Player : CostumBehaviour
 
             #endregion
         }
-
+    
         
         #region Events
 
         private void OnGameStart()
         {
-            Debug.Log("Player");
+            GameStart.Invoke();
         }
 
         private void OnGameEnd()
@@ -43,4 +45,4 @@ public class Player : CostumBehaviour
         }
 
         #endregion
-    }
+}
