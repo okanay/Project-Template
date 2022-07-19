@@ -1,11 +1,20 @@
+using System;
 using UnityEngine;
 
 public class PlayerManager : CostumBehaviour
 {
-    private readonly PlayerData m_PlayerData = new PlayerData();
+    public Player player;
+    public PlayerData PlayerData = new PlayerData();
+    
+    public AnimationState AnimationChange;
+    
+    public MovementState MovementActivate;
+    public MovementState MovementDeActivate;
     
     public int GetPlayerCurrency => PlayerData.PlayerMoney;
     public int GetPlayerLevel => PlayerData.PlayerLevel;
+    
+    // -------------------------------------------------------------Setter.
     
     public void ChangePlayerCurrency(int value)
     {

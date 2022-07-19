@@ -2,37 +2,40 @@ using UnityEngine;
 
 public class Movement : CostumBehaviour
 {
+    [SerializeField] private Animator animator;
     [SerializeField] private Transform playerMesh;
     [SerializeField] private float horizontalSpeed, verticalSpeed;
-    
-    private bool m_ForwardMove;
+
+    private bool m_VerticalMove;
     private bool m_HorizontalMov;
+    
     private Vector3 m_PlayerMeshPos;
     private Vector3 m_PreviousMousePos;
     private Vector3 m_SmoothVelocity = Vector3.zero;
-    private Player m_Player;
-
-    private void Start()
+    
+    private void Awake()
     {
-        m_Player = GetComponent<Player>();
-        m_Player.GameStart += GameStart;
+        PlayerManager.MovementActivate += ActiveMovement;
+        PlayerManager.MovementDeActivate += DeActiveMovement;
+        PlayerManager.AnimationChange += AnimationChange;
     }
-
     private void Update()
     {
         PlayerMovement();
     }
-
-    #region Hyper Casual Movement
-
     private void PlayerMovement()
     {
-        MousePosCheck();
-        
-        if (m_ForwardMove) transform.position += Vector3.forward * verticalSpeed * Time.deltaTime;
-        
-        if (m_HorizontalMov) playerMesh.localPosition =
-            Vector3.SmoothDamp(playerMesh.localPosition, m_PlayerMeshPos, ref m_SmoothVelocity, 0.1f);
+        if (m_VerticalMove)
+        {
+            transform.position += Vector3.forward * verticalSpeed * Time.deltaTime;
+        }
+    
+        if (m_HorizontalMov)
+        {
+            MousePosCheck();
+            playerMesh.localPosition =
+                Vector3.SmoothDamp(playerMesh.localPosition, m_PlayerMeshPos, ref m_SmoothVelocity, 0.1f);
+        }
     }
     private void MousePosCheck()
     {
@@ -50,15 +53,22 @@ public class Movement : CostumBehaviour
             m_PreviousMousePos = Input.mousePosition;
         }
     }
-
-    #endregion
-    #region Delegetes
-
-    private void GameStart()
+    
+    #region TASK
+    private void AnimationChange(string animName, float normalizedTime = 0.1f, int layer = 0)
     {
-        m_HorizontalMov = true;
-        m_ForwardMove = true;
+        animator.CrossFade(animName, normalizedTime, layer);
     }
-
+    private void ActiveMovement(bool horizontal, bool vertical)
+    {
+        if (horizontal & !m_HorizontalMov) m_HorizontalMov = true;
+        if (vertical & !m_VerticalMove)  m_VerticalMove = true; 
+    }
+    private void DeActiveMovement(bool horizontal, bool vertical)
+    {
+        if (horizontal & m_HorizontalMov) m_HorizontalMov = false;
+        if (vertical & m_VerticalMove) m_VerticalMove = false; 
+    }
+    
     #endregion
 }

@@ -20,7 +20,7 @@ public class CanvasManager : CostumBehaviour
 
         private void OnGameStart()
         {
-            Debug.Log("Canvas Manager");
+        
         }
 
         private void OnGameEnd()
