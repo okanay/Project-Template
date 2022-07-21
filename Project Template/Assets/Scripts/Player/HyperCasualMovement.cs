@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Movement : CostumBehaviour
+public class HyperCasualMovement : CostumBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private Transform playerMesh;
