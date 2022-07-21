@@ -6,8 +6,8 @@ using UnityEngine;
 public class CasualMovement : MonoBehaviour
 {
     [SerializeField] private float rotateSpeed, movementSpeed;
-    [SerializeField] private Rigidbody rigid;
-
+    private Rigidbody Rigid => GetComponent<Rigidbody>();
+    
     private Vector3 m_MoveDirection;
     private float m_Horizontal;
     private float m_Vertical;
@@ -43,12 +43,12 @@ public class CasualMovement : MonoBehaviour
     }
     private void RigidbodyMovement()
     {
-        rigid.MovePosition(transform.position + m_MoveDirection * Time.deltaTime * movementSpeed);
+        Rigid.MovePosition(transform.position + m_MoveDirection * Time.deltaTime * movementSpeed);
         
         if (m_MoveDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(m_MoveDirection, Vector3.up);
-            rigid.MoveRotation( Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime * 100));
+            Rigid.MoveRotation( Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed * Time.deltaTime * 100));
         }
     }
     
