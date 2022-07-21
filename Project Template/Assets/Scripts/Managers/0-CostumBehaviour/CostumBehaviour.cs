@@ -12,7 +12,7 @@ public class CostumBehaviour : MonoBehaviour
     protected CanvasManager CanvasManager => GameManagers.CanvasManager;
     protected CameraManager CameraManager => GameManagers.CameraManager;
 
-    public delegate void MovementState(bool horizontal = true, bool vertical = true); // hyperCasual
+    public delegate void MovementState(bool boolcheck = true, bool boolcheck2 = true); // hyperCasual
 
     public delegate void AnimationState(string animName, float normalizedTime = 0.1f, int layer = 0); // hyperCasual
 

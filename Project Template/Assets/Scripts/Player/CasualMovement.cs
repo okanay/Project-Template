@@ -3,22 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CasualMovement : MonoBehaviour
+public class CasualMovement : CostumBehaviour
 {
-    [SerializeField] private float rotateSpeed, movementSpeed;
-    private Rigidbody Rigid => GetComponent<Rigidbody>();
+    [SerializeField]
+    private float rotateSpeed;
+    
+    [SerializeField]
+    private float movementSpeed;
+    private Rigidbody Rigid =>
+        GetComponent<Rigidbody>(); 
+    private Animator Animator =>
+        GetComponent<Animator>();
     
     private Vector3 m_MoveDirection;
     private float m_Horizontal;
     private float m_Vertical;
-    private bool m_Movement;
+    private bool m_RigidbodyMovement;
+    private bool m_TransformMovement;
+    
+    private void Awake()
+    {
+        PlayerManager.MovementActivate += ActiveMovement;
+        PlayerManager.MovementDeActivate += DeActiveMovement;
+        PlayerManager.AnimationChange += AnimationChange;
+    }
     private void Update()
     {
         InputData();
-       // TransformMovement();
+
+        if (!m_TransformMovement) return;
+         TransformMovement();
     }
     private void FixedUpdate()
     {
+        if (!m_RigidbodyMovement) return;
         RigidbodyMovement();
     }
 
@@ -29,7 +47,6 @@ public class CasualMovement : MonoBehaviour
         m_MoveDirection = new Vector3(m_Horizontal, 0, m_Vertical);
         m_MoveDirection.Normalize();
     }
-    
     private void TransformMovement()
     {
         transform.Translate(m_MoveDirection * Time.deltaTime * movementSpeed, Space.World);
@@ -52,4 +69,21 @@ public class CasualMovement : MonoBehaviour
         }
     }
     
+    #region TASK
+    private void AnimationChange(string animName, float normalizedTime = 0.1f, int layer = 0)
+    {
+        Animator.CrossFade(animName, normalizedTime, layer);
+    }
+    private void ActiveMovement(bool rigidbodyMovement, bool transformMovement)
+    {
+        if (rigidbodyMovement & !m_RigidbodyMovement) m_RigidbodyMovement = true;
+        if (transformMovement & !m_TransformMovement) m_TransformMovement = true;
+    }
+    private void DeActiveMovement(bool rigidbodyMovement, bool transformMovement)
+    {
+        if (rigidbodyMovement & m_RigidbodyMovement) m_RigidbodyMovement = false;
+        if (transformMovement & m_TransformMovement) m_TransformMovement = false;
+    }
+    
+    #endregion
 }

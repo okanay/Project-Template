@@ -16,8 +16,9 @@ public class Player : CostumBehaviour
     }
     private void OnGameStart()
     {
-        PlayerManager.MovementActivate.Invoke();
-     //   PlayerManager.AnimationChange.Invoke(Run, 0.25f);
+    // PlayerManager.MovementActivate.Invoke();                              // HyperCasual - Transform Movement
+     PlayerManager.MovementActivate.Invoke(true, false);   // Casual - Rigidbody Movement.
+    // PlayerManager.MovementActivate.Invoke(false, true);                   //  Casual - Transform Movement.
     }
     private void OnGameEnd()
     {
